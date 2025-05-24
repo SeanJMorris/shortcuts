@@ -1,7 +1,7 @@
 {
 	"name": "Vimium C",
-	"@time": "5/23/2025, 7:05:11 PM",
-	"time": 1748041511218,
+	"@time": "5/24/2025, 8:41:58 AM",
+	"time": 1748090518016,
 	"environment": {
 		"extension": "2.12.3",
 		"platform": "win",
@@ -11,7 +11,7 @@
 	"exclusionRules": [
 		{
 			"passKeys": "0 < > j k l ",
-			"pattern": ":https://www.youtube.com/"
+			"pattern": ":https://www.youtube.com/watch"
 		},
 		{
 			"passKeys": "/ L X ` g i j k l r u x ",
