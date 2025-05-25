@@ -1,7 +1,7 @@
 {
 	"name": "Vimium C",
-	"@time": "5/24/2025, 8:41:58 AM",
-	"time": 1748090518016,
+	"@time": "5/25/2025, 9:39:20 AM",
+	"time": 1748180360958,
 	"environment": {
 		"extension": "2.12.3",
 		"platform": "win",
@@ -10,8 +10,8 @@
 	"allBrowserUrls": true,
 	"exclusionRules": [
 		{
-			"passKeys": "0 < > j k l ",
-			"pattern": ":https://www.youtube.com/watch"
+			"passKeys": "< > j k l ",
+			"pattern": ":https://www.youtube.com/"
 		},
 		{
 			"passKeys": "/ L X ` g i j k l r u x ",
@@ -50,8 +50,8 @@
 			"pattern": ":https://www.keyhero.com/"
 		},
 		{
-			"passKeys": "[ ] z ",
-			"pattern": ":https://confluence.fpac.usda.gov/"
+			"passKeys": "",
+			"pattern": ":https://www.figma.com/"
 		}
 	],
 	"grabBackFocus": true,
@@ -60,7 +60,6 @@
 		"#!no-check",
 		"unmap p",
 		"unmap i",
-		"map W moveTabToNewWindow",
 		""
 	],
 	"searchEngines": [
