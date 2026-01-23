@@ -1,0 +1,433 @@
+' BEGIN HELPER FUNCTIONS FOR TEXT EDITING - BEGIN HELPER FUNCTIONS FOR TEXT EDITING - BEGIN HELPER FUNCTIONS FOR TEXT EDITING
+' BEGIN HELPER FUNCTIONS FOR TEXT EDITING - BEGIN HELPER FUNCTIONS FOR TEXT EDITING - BEGIN HELPER FUNCTIONS FOR TEXT EDITING
+' BEGIN HELPER FUNCTIONS FOR TEXT EDITING - BEGIN HELPER FUNCTIONS FOR TEXT EDITING - BEGIN HELPER FUNCTIONS FOR TEXT EDITING
+
+Function FailsTextModificationGatekeeper(inputRange As Range) As Boolean
+    FailsTextModificationGatekeeper = False
+    
+    If Selection.Type <> wdSelectionNormal Or Selection.Characters.Count = 0 Then
+        FailsTextModificationGatekeeper = True
+    End If
+    
+End Function
+
+Function HasParagraphMarkAsLastCharacter(inputRange) As Boolean
+        Dim rng As Range
+        Set rng = Selection.Range
+                
+        Dim lastChar As String
+        
+        ' Get the text of the last character in the selection
+        ' Note: Using .Characters.Last can be problematic with range objects.
+        ' A safer way is to create a small range just for the last character.
+        
+        ' Move the start of a temporary range to the selection's end position - 1
+        ' and the end to the selection's end position.
+        ' This isolates the final character.
+        Dim lastCharRng As Range
+        Set lastCharRng = rng.Duplicate
+        
+        ' Move the start of the duplicate range to the end of the original range minus 1
+        lastCharRng.Start = rng.End - 1
+        ' The end is already at rng.End
+        
+        ' Get the text of the last character
+        lastChar = lastCharRng.Text
+        
+        ' Check if the last character is a Paragraph Mark (Ascii 13 or vbCr)
+        ' Note: In Word VBA, Chr(13) or vbCr is typically used for a paragraph mark.
+        If lastChar = Chr(13) Then
+            HasParagraphMarkAsLastCharacter = True
+        Else
+            HasParagraphMarkAsLastCharacter = False
+        End If
+
+End Function
+
+Function TrimSelectionParagraphMark(inputRange As Range) As Range
+    Dim newRange As Range
+    Set newRange = inputRange.Duplicate
+    newRange.SetRange Start:=inputRange.Start, End:=inputRange.End - 1
+    Set TrimSelectionParagraphMark = newRange
+End Function
+
+
+' END HELPER FUNCTIONS FOR TEXT EDITING - END HELPER FUNCTIONS FOR TEXT EDITING - END HELPER FUNCTIONS FOR TEXT EDITING
+' END HELPER FUNCTIONS FOR TEXT EDITING - END HELPER FUNCTIONS FOR TEXT EDITING - END HELPER FUNCTIONS FOR TEXT EDITING
+' BEGIN FUNCTIONS WITH SHORTCUTS - BEGIN FUNCTIONS WITH SHORTCUTS - BEGIN FUNCTIONS WITH SHORTCUTS
+' BEGIN FUNCTIONS WITH SHORTCUTS - BEGIN FUNCTIONS WITH SHORTCUTS - BEGIN FUNCTIONS WITH SHORTCUTS
+' BEGIN FUNCTIONS WITH SHORTCUTS - BEGIN FUNCTIONS WITH SHORTCUTS - BEGIN FUNCTIONS WITH SHORTCUTS
+
+
+Sub ToggleHighlightAndColor_Red()
+'SHORTCUT = CTRL + SHIFT + R
+    
+    If FailsTextModificationGatekeeper(Selection.Range) Then Exit Sub
+    
+    Dim rngNewSelection As Range
+    
+    Set rngNewSelection = Selection.Range
+    
+    If HasParagraphMarkAsLastCharacter(Selection) Then
+        Set rngNewSelection = TrimSelectionParagraphMark(Selection.Range)
+    End If
+    
+    
+    If rngNewSelection.HighlightColorIndex = wdRed Then
+        rngNewSelection.HighlightColorIndex = wdNoHighlight
+        rngNewSelection.Font.Color = wdColorAutomatic
+    ElseIf rngNewSelection.Font.Color = wdColorRed Then
+        rngNewSelection.Font.Color = wdColorAutomatic
+        rngNewSelection.HighlightColorIndex = wdRed
+    Else
+        rngNewSelection.Font.Color = wdColorRed
+    End If
+End Sub
+Sub ToggleTextColor_Orange()
+'SHORTCUT = CTRL + SHIFT + O
+    If FailsTextModificationGatekeeper(Selection.Range) Then Exit Sub
+    
+    Dim rngNewSelection As Range
+    
+    Set rngNewSelection = Selection.Range
+    
+    If HasParagraphMarkAsLastCharacter(Selection) Then
+        Set rngNewSelection = TrimSelectionParagraphMark(Selection.Range)
+    End If
+    
+    
+    If rngNewSelection.Font.Color = wdColorAutomatic Then
+        rngNewSelection.Font.Color = wdColorOrange
+    Else
+        rngNewSelection.Font.Color = wdColorAutomatic
+    End If
+
+End Sub
+Sub ToggleHighlightAndColor_Yellow()
+'SHORTCUT = CTRL + SHIFT + H
+    If FailsTextModificationGatekeeper(Selection.Range) Then Exit Sub
+    
+    Dim rngNewSelection As Range
+    
+    Set rngNewSelection = Selection.Range
+    
+    If HasParagraphMarkAsLastCharacter(Selection) Then
+        Set rngNewSelection = TrimSelectionParagraphMark(Selection.Range)
+    End If
+    
+    
+    If rngNewSelection.HighlightColorIndex = wdYellow Then
+        rngNewSelection.HighlightColorIndex = wdNoHighlight
+        rngNewSelection.Font.Color = wdColorGold
+    ElseIf rngNewSelection.Font.Color = wdColorGold Then
+        rngNewSelection.Font.Color = wdColorAutomatic
+    Else
+        rngNewSelection.HighlightColorIndex = wdYellow
+    End If
+End Sub
+Sub ToggleHighlightAndColor_Green()
+'SHORTCUT = CTRL + SHIFT + G
+    If FailsTextModificationGatekeeper(Selection.Range) Then Exit Sub
+    
+    Dim rngNewSelection As Range
+    
+    Set rngNewSelection = Selection.Range
+    
+    If HasParagraphMarkAsLastCharacter(Selection) Then
+        Set rngNewSelection = TrimSelectionParagraphMark(Selection.Range)
+    End If
+    
+    If rngNewSelection.HighlightColorIndex = wdBrightGreen Then
+        rngNewSelection.HighlightColorIndex = wdNoHighlight
+        rngNewSelection.Font.Color = wdColorAutomatic
+    ElseIf rngNewSelection.Font.Color = wdColorGreen Then
+        rngNewSelection.Font.Color = wdColorAutomatic
+        rngNewSelection.HighlightColorIndex = wdBrightGreen
+    Else
+        rngNewSelection.Font.Color = wdColorGreen
+    End If
+
+End Sub
+Sub ToggleHighlightAndColor_Blue()
+'SHORTCUT = CTRL + SHIFT + B
+    If FailsTextModificationGatekeeper(Selection.Range) Then Exit Sub
+    
+    Dim rngNewSelection As Range
+    
+    Set rngNewSelection = Selection.Range
+    
+    If HasParagraphMarkAsLastCharacter(Selection) Then
+        Set rngNewSelection = TrimSelectionParagraphMark(Selection.Range)
+    End If
+    
+    If rngNewSelection.Font.Color = wdColorBlue Then
+        rngNewSelection.Font.Color = wdColorAutomatic
+        rngNewSelection.HighlightColorIndex = wdTurquoise
+    ElseIf rngNewSelection.HighlightColorIndex = wdTurquoise Then
+        rngNewSelection.HighlightColorIndex = wdNoHighlight
+        rngNewSelection.Font.Color = wdColorAutomatic
+    Else
+        rngNewSelection.Font.Color = wdColorBlue
+    End If
+    
+End Sub
+Sub ToggleTextColor_Indigo()
+'SHORTCUT = CTRL + SHIFT + I
+    If FailsTextModificationGatekeeper(Selection.Range) Then Exit Sub
+    
+    Dim rngNewSelection As Range
+    
+    Set rngNewSelection = Selection.Range
+    
+    If HasParagraphMarkAsLastCharacter(Selection) Then
+        Set rngNewSelection = TrimSelectionParagraphMark(Selection.Range)
+    End If
+    
+    If rngNewSelection.HighlightColorIndex = wdPink Then
+        rngNewSelection.HighlightColorIndex = wdNoHighlight
+        rngNewSelection.Font.Color = wdColorPink
+    ElseIf rngNewSelection.Font.Color = wdColorPink Then
+        rngNewSelection.Font.Color = wdColorAutomatic
+    Else
+        rngNewSelection.HighlightColorIndex = wdPink
+    End If
+
+End Sub
+Sub ToggleHighlightAndColor_Violet()
+'SHORTCUT = CTRL + SHIFT + E
+    If FailsTextModificationGatekeeper(Selection.Range) Then Exit Sub
+    
+    Dim rngNewSelection As Range
+    
+    Set rngNewSelection = Selection.Range
+    
+    If HasParagraphMarkAsLastCharacter(Selection) Then
+        Set rngNewSelection = TrimSelectionParagraphMark(Selection.Range)
+    End If
+    
+    If rngNewSelection.HighlightColorIndex = wdViolet Then
+        rngNewSelection.HighlightColorIndex = wdNoHighlight
+        rngNewSelection.Font.Color = wdColorViolet
+    ElseIf rngNewSelection.Font.Color = wdColorViolet Then
+        rngNewSelection.Font.Color = wdColorAutomatic
+    Else
+        rngNewSelection.HighlightColorIndex = wdViolet
+    End If
+
+End Sub
+
+Sub ToggleHighlightAndColor_Gray()
+'SHORTCUT = CTRL + SHIFT + Y
+    If FailsTextModificationGatekeeper(Selection.Range) Then Exit Sub
+    
+    Dim rngNewSelection As Range
+    
+    Set rngNewSelection = Selection.Range
+    
+    If HasParagraphMarkAsLastCharacter(Selection) Then
+        Set rngNewSelection = TrimSelectionParagraphMark(Selection.Range)
+    End If
+
+'    If Selection.Range.HighlightColorIndex = wdGray50 Then
+'        Selection.Range.HighlightColorIndex = wdNoHighlight
+'        Selection.Range.Font.Color = wdColorAutomatic
+'    ElseIf Selection.Range.Font.Color = wdColorAutomatic And Selection.Range.HighlightColorIndex = wdNoHighlight Then
+'        Selection.Range.HighlightColorIndex = wdGray25
+'    Else
+'        Selection.Range.HighlightColorIndex = wdGray50
+'    End If
+
+    If rngNewSelection.Font.Color = wdColorAutomatic And rngNewSelection.HighlightColorIndex = wdNoHighlight Then
+        rngNewSelection.HighlightColorIndex = wdGray25
+    ElseIf rngNewSelection.HighlightColorIndex = wdGray25 Then
+        rngNewSelection.HighlightColorIndex = wdGray50
+    ElseIf rngNewSelection.HighlightColorIndex = wdGray50 Then
+        rngNewSelection.Font.Color = wdColorWhite
+        rngNewSelection.HighlightColorIndex = wdNoHighlight
+     Else
+        rngNewSelection.Font.Color = wdColorAutomatic
+    End If
+
+    
+    
+End Sub
+
+Sub InsertDayOfWeekAndShortDate()
+'SHORTCUT = CTRL + SHIFT + :
+    Dim dayOfWeek As String
+    Dim shortDate As String
+    Dim ampm As String
+    
+    
+    ' Get the current day of the week (abbreviated to three letters) and capitalize it
+    dayOfWeek = UCase(Format(Now, "ddd"))
+    
+    ' Get the short date in the format "m/d/yy"
+    shortDate = Format(Now, "m/d/yy")
+    
+    
+    'Enable/Disable AM/PM part of this code
+    Dim EnableAmPmQuestion As Boolean
+    EnableAmPmQuestion = False
+    
+    
+    If EnableAmPmQuestion = True Then
+        
+         ' Display the dialog box and ask the user if it's "AM" time
+        Dim dialogResult As VbMsgBoxResult
+        dialogResult = MsgBox("Is it AM?", vbYesNo + vbQuestion, "AM or PM Selection")
+    
+        ' Check the user's selection and set "ampm" accordingly
+        If dialogResult = vbYes Then
+            ampm = "AM"
+        Else
+            ampm = "PM"
+        End If
+        
+        ' Insert the capitalized day of the week and short date at the current cursor position
+        Selection.TypeText dayOfWeek & " " & shortDate & "  " & ampm
+        
+        'Move the cursor so that you can type the time of the event
+        Selection.MoveLeft Unit:=wdCharacter, Count:=3
+        
+    Else: Selection.TypeText dayOfWeek & " " & shortDate
+    
+    End If
+    
+
+    
+End Sub
+
+Sub ToggleStrikethrough()
+'SHORTCUT = CTRL + SHIFT + S
+    If FailsTextModificationGatekeeper(Selection.Range) Then Exit Sub
+    
+    Dim rngNewSelection As Range
+    
+    Set rngNewSelection = Selection.Range
+    
+    If HasParagraphMarkAsLastCharacter(Selection) Then
+        Set rngNewSelection = TrimSelectionParagraphMark(Selection.Range)
+    End If
+    
+    Set rng = Selection.Range
+    If rngNewSelection.Font.Name <> "" Then
+        ' Get the current strikethrough setting
+        currentFormat = rngNewSelection.Font.StrikeThrough
+        
+        ' Toggle the strikethrough setting
+        rngNewSelection.Font.StrikeThrough = Not currentFormat
+    End If
+End Sub
+
+Sub WhiteSpaceToggle()
+    'SHORTCUT = CTRL + SHIFT + U
+    If Not Application.ActiveDocument Is Nothing Then
+    With Application.ActiveDocument.ActiveWindow.View
+    .DisplayPageBoundaries = Not .DisplayPageBoundaries
+    End With
+    End If
+End Sub
+
+Sub ZoomOut()
+    'CTRL SHIFT + N
+    Call ZoomByIncrement(-10)
+End Sub
+
+Sub ZoomIn()
+    'CTRL + SHIFT + M
+    Call ZoomByIncrement(10)
+
+End Sub
+
+Sub ZoomByIncrement(intZoomIncrement As Integer)
+    Dim currentZoom As Long
+    
+    ' Check if there is an active window
+    If Not ActiveWindow Is Nothing Then
+        
+        ' Get the current zoom percentage
+        currentZoom = ActiveWindow.View.Zoom.Percentage
+        
+        ' Calculate the new zoom percentage (reduce by 5)
+        Dim newZoom As Long
+        newZoom = currentZoom + intZoomIncrement
+        
+        ' Ensure the new zoom is not below the minimum (10%)
+        If newZoom >= 30 And newZoom <= 300 Then
+            ' Apply the new zoom level
+            ActiveWindow.View.Zoom.Percentage = newZoom
+'        Elif newZoom
+'            MsgBox "The minimum zoom level (10%) has been reached.", vbInformation, "Zoom Limit Reached"
+        End If
+        
+    End If
+
+End Sub
+
+Sub ApplyNormalStyle()
+    'CTRL + SHIFT + +
+    Selection.Range.Style = ActiveDocument.Styles(wdStyleNormal)
+End Sub
+
+
+Sub ToggleNarrowAndNormalMargins()
+    'CTRL + SHFIT + W
+    'define margin width variables
+    Dim dblLeftMargin, dblRightMargin As Double
+    dblLeftMargin = PointsToInches(Selection.PageSetup.LeftMargin)
+    dblRightMargin = PointsToInches(Selection.PageSetup.RightMargin)
+    
+    'define what THIS page is - narrow, wide, or neither? refer to marginType Enum
+    'Dim myPageMarginType As pageMarginType
+    If dblLeftMargin = 2 And dblRightMargin = 2 Then
+        'page is narrow (margin is wide) --> make page wide
+        'myPageMarginType = narrow
+        Selection.PageSetup.LeftMargin = InchesToPoints(1)
+        Selection.PageSetup.RightMargin = InchesToPoints(1)
+    ElseIf dblLeftMargin = 1 And dblRightMargin = 1 Then
+        'page is wide (margin is narrow) --> make page narrow
+        'myPageMarginType = wide
+        Selection.PageSetup.LeftMargin = InchesToPoints(2)
+        Selection.PageSetup.RightMargin = InchesToPoints(2)
+    Else
+        Dim userResponse As VbMsgBoxResult
+    
+        ' 1. Display the dialog box and store the user's choice
+        userResponse = MsgBox( _
+            Prompt:="This page width is neither 'normal' (1 in. margins) nor 'narrow' (with wide, 2 in. margins). Apply normal 1 in. margins?", _
+            Buttons:=vbYesNo + vbQuestion, _
+            Title:="Apply Normal Page Width?" _
+        )
+        
+        ' 2. Check the stored response value & apply standard.
+        If userResponse = vbYes Then
+            Selection.PageSetup.LeftMargin = InchesToPoints(1)
+            Selection.PageSetup.RightMargin = InchesToPoints(1)
+        End If
+        
+    End If
+    
+End Sub
+
+
+
+' END FUNCTIONS WITH SHORTCUTS - END FUNCTIONS WITH SHORTCUTS - END FUNCTIONS WITH SHORTCUTS
+' END FUNCTIONS WITH SHORTCUTS - END FUNCTIONS WITH SHORTCUTS - END FUNCTIONS WITH SHORTCUTS
+
+'OTHER MACROS THAT ARE NOT SHORTCUTS, OTHER MACROS THAT ARE NOT SHORTCUTS, OTHER MACROS THAT ARE NOT SHORTCUTS, OTHER MACROS THAT ARE NOT SHORTCUTS
+'OTHER MACROS THAT ARE NOT SHORTCUTS, OTHER MACROS THAT ARE NOT SHORTCUTS, OTHER MACROS THAT ARE NOT SHORTCUTS, OTHER MACROS THAT ARE NOT SHORTCUTS
+'OTHER MACROS THAT ARE NOT SHORTCUTS, OTHER MACROS THAT ARE NOT SHORTCUTS, OTHER MACROS THAT ARE NOT SHORTCUTS, OTHER MACROS THAT ARE NOT SHORTCUTS
+
+
+Sub AddImageBorder()
+    'Check if an image is selected
+    If Selection.InlineShapes.Count = 1 Then
+        'Set the selected image's border width to 2 points
+        Selection.InlineShapes(1).Line.Weight = 2
+        'Set the selected image's border color to black
+        Selection.InlineShapes(1).Line.ForeColor.RGB = RGB(0, 0, 0)
+    Else
+        MsgBox "Please select an image to add a border to."
+    End If
+End Sub
