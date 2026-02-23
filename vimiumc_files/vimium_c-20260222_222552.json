@@ -10,7 +10,7 @@
   "allBrowserUrls": true,
   "exclusionRules": [
 	{
-      "passKeys": "/ ` j k g o r x",
+      "passKeys": "/ ` j k g o x",
 	  "pattern": "^https://mail.google.com/mail/u/0/((?!FMfcg).)*$"
     },
 	{
