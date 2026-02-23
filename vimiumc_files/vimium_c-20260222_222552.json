@@ -10,11 +10,11 @@
   "allBrowserUrls": true,
   "exclusionRules": [
 	{
-      "passKeys": "/ ` j k g o x",
+      "passKeys": "/ ` N j k g n o x",
 	  "pattern": "^https://mail.google.com/mail/u/0/((?!FMfcg).)*$"
     },
 	{
-      "passKeys": "/ J K g r x p n",
+      "passKeys": "/ J K N g r x p n",
 	  "pattern": "^https://mail.google.com/mail/u/0/.*([A-Za-z0-9_-]{16,})"
     },
     {
