@@ -1,58 +1,56 @@
 // ==UserScript==
-// @name         YouTube Auto-Transcript 2 fix attempt
+// @name         YouTube Auto-Show Transcript - 3.8.26 - works
 // @namespace    http://tampermonkey.net/
-// @version      1.1
-// @description  Automatically opens the transcript on YouTube video pages
-// @author       Sean Morris
-// @match        https://www.youtube.com/watch?v=*
+// @version      1.4
+// @description  Automatically opens the transcript on any YouTube video page
+// @author       Gemini
+// @match        *://www.youtube.com/*
 // @grant        none
 // ==/UserScript==
-
 
 (function() {
     'use strict';
 
-    function YouTubeAutomaticTranscript() {
-        // 1. Find the "...more" button
-        const moreButton = document.querySelector('#expand');
+    let lastVideoId = "";
 
+    function openTranscript() {
+        // 1. Find and click the "...more" button in the description
+        const moreButton = document.querySelector('#expand, #description-inline-expander');
         if (moreButton) {
             moreButton.click();
-            console.log('Description expanded.');
 
-            // 2. Wait for the transcript/chapters button to appear
-            // We use a slightly longer delay or a repeated check because
-            // the expanded description takes a moment to animate in.
+            // 2. Wait a brief moment for the description to expand, then find "Show transcript"
             setTimeout(() => {
+                // YouTube uses a button with specific text or a specialized component
                 const transcriptButton = Array.from(document.querySelectorAll('button'))
                     .find(btn => btn.innerText.includes('Show transcript'));
-                const chaptersButton = Array.from(document.querySelectorAll('button'))
-                    .find(btn => btn.innerText.includes('View all'));
 
-                if (chaptersButton) {
-                    chaptersButton.click();
-                    console.log('Chapters opened.');
-                } else if (transcriptButton) {
+                if (transcriptButton) {
                     transcriptButton.click();
-                    console.log('Transcript opened.');
-                } else {
-                    console.log('Transcript/Chapters button not found yet.');
+                    console.log("Transcript opened!");
                 }
-            }, 700);
-        } else {
-            // If the button isn't there, the page might still be loading.
-            // We'll try again in 1 second.
-            setTimeout(YouTubeAutomaticTranscript, 1000);
+            }, 500); // 500ms delay to let the UI update
         }
-    };
+    }
 
-    // This event fires when the page finishes loading OR navigates to a new video
-    window.addEventListener('yt-navigate-finish', () => {
-        // Short delay to ensure the DOM is ready for the new video
-        setTimeout(YouTubeAutomaticTranscript, 1000);
-    });
+    function checkVideoChange() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentVideoId = urlParams.get('v');
 
-    // Run on initial page load
-    YouTubeAutomaticTranscript();
+        if (currentVideoId && currentVideoId !== lastVideoId) {
+            lastVideoId = currentVideoId;
+
+            // Give the video page a second to load the description elements
+            setTimeout(openTranscript, 2000);
+        }
+    }
+
+    // Standard SPA listeners
+    window.addEventListener('yt-navigate-finish', checkVideoChange);
+
+    // Safety check for direct loads
+    if (window.location.href.includes('watch?v=')) {
+        setTimeout(checkVideoChange, 2000);
+    }
 
 })();
